@@ -8,11 +8,12 @@
     <TextView
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_gravity="center"
+       android:textAlignment="center"
+        android:padding="20dp"
         android:id="@+id/fullName"
         android:background="@drawable/border"
         android:textColor="#000000"
-        android:text="My Data List"
+        android:text="My Contact List"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <ListView

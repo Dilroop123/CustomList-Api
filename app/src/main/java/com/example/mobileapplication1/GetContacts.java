@@ -25,7 +25,7 @@ class GetContacts extends AsyncTask<String,Integer,String> implements AdapterVie
     ListView customList;
     Activity context;
     ProgressDialog loader;
-    ArrayList<Contact> contactArrayList;
+    ArrayList<Contact> contactArrayList =new ArrayList<>();
 
     public GetContacts(MainActivity mainActivity) {
         context=mainActivity;
