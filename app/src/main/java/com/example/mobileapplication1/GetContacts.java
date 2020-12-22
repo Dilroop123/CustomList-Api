@@ -25,7 +25,7 @@ class GetContacts extends AsyncTask<String,Integer,String> implements AdapterVie
     ListView customList;
     Activity context;
     ProgressDialog loader;
-    ArrayList nameList, OwnerfullNameList;
+    ArrayList<Contact> contactArrayList;
 
     public GetContacts(MainActivity mainActivity) {
         context=mainActivity;
@@ -52,17 +52,18 @@ class GetContacts extends AsyncTask<String,Integer,String> implements AdapterVie
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
-        // THIS WILL TOAST THE NAME , WHEN ITEM IS CLICKED
-        String name= String.valueOf(nameList.get(i));
-        Toast.makeText(context, name, Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(con,ContactDescription.class);
+        intent.putExtra("contactDetail",contactArrayList.get(i));
+        con.startActivity(intent);
+
     }
 
     @Override
     protected void onPostExecute(String s) {
         //FIRST , LOADER IS MADE DISMISSED
         loader.dismiss();
-        nameList = new ArrayList();
-        OwnerfullNameList = new ArrayList();
+
         try {
             JSONArray contactListData = new JSONArray(s);
             //ITERATE THE LIST AND GET THE NAME AND LOGIN NAME
@@ -70,16 +71,22 @@ class GetContacts extends AsyncTask<String,Integer,String> implements AdapterVie
             {
                 JSONObject contacts = contactListData.getJSONObject(i);
                 String name = contacts.getString("name");
+                String nodeId = contacts.getString("node_id");
+                String description = contacts.getString("description");
+                String fork = contacts.getString("fork");
+                String downloads_url = contacts.getString("downloads_url");
 
                 JSONObject ownerData = contacts.getJSONObject("owner");
                 // GO DEEPER IN OWNER TO GET THE LOGIN NAME
                 String OwnerLoginName = ownerData.getString("login");
 
-                nameList.add(name);
-                OwnerfullNameList.add(OwnerLoginName);
+                contactArrayList.add(new Contact(name,OwnerLoginName,nodeId,description,fork,downloads_url));
+
+
+
             }
 
-            MyListAdapter adapter=new MyListAdapter(context, nameList, OwnerfullNameList);
+            MyListAdapter adapter=new MyListAdapter(context, contactArrayList);
             customList.setAdapter(adapter);
 
         } catch (JSONException e) {
